@@ -2,9 +2,16 @@ class DefaultTest < DatabilityValidatorTest
   def test_default_validate_datability
     SampleModel.validates(:date, datability: true)
 
-    allow_valid(['2016-01-01', Time.zone.now])
+    valid_values = [
+      @today,
+      @today_as_string,
+      @today_as_localized_string
+    ]
+    allow_valid(valid_values)
+
+    invalid_values = ['2016-30-30', '01012016']
     disallow_invalid(
-      ['2016-30-30', '01012016'],
+      invalid_values,
       I18n.t(:invalid, scope: [:errors, :messages])
     )
   end

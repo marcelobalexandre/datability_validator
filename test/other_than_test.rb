@@ -1,12 +1,15 @@
-class GreaterThanTest < DatabilityValidatorTest
-  def test_greater_than_with_proc
+class OtherThanTest < DatabilityValidatorTest
+  def test_other_than_with_proc
     [@today, @today_as_string, @today_as_localized_string].each do |today|
       SampleModel.validates(
         :date,
-        datability: { greater_than: Proc.new { today } }
+        datability: { other_than: Proc.new { today } }
       )
 
       valid_values = [
+        @yesterday,
+        @yesterday_as_string,
+        @yesterday_as_localized_string,
         @tomorrow,
         @tomorrow_as_string,
         @tomorrow_as_localized_string
@@ -14,9 +17,6 @@ class GreaterThanTest < DatabilityValidatorTest
       allow_valid(valid_values)
 
       invalid_values = [
-        @yesterday,
-        @yesterday_as_string,
-        @yesterday_as_localized_string,
         @today,
         @today_as_string,
         @today_as_localized_string
@@ -24,7 +24,7 @@ class GreaterThanTest < DatabilityValidatorTest
       disallow_invalid(
         invalid_values,
         I18n.t(
-          :greater_than,
+          :other_than,
           scope: [:errors, :messages],
           count: @today_as_localized_string
         )
@@ -32,17 +32,20 @@ class GreaterThanTest < DatabilityValidatorTest
     end
   end
 
-  def test_greater_than_with_symbol
+  def test_other_than_with_symbol
     [@today, @today_as_string, @today_as_localized_string].each do |today|
       begin
         SampleModel.send(:define_method, :another_date, -> { today })
 
         SampleModel.validates(
           :date,
-          datability: { greater_than: :another_date }
+          datability: { other_than: :another_date }
         )
 
         valid_values = [
+          @yesterday,
+          @yesterday_as_string,
+          @yesterday_as_localized_string,
           @tomorrow,
           @tomorrow_as_string,
           @tomorrow_as_localized_string
@@ -50,9 +53,6 @@ class GreaterThanTest < DatabilityValidatorTest
         allow_valid(valid_values)
 
         invalid_values = [
-          @yesterday,
-          @yesterday_as_string,
-          @yesterday_as_localized_string,
           @today,
           @today_as_string,
           @today_as_localized_string
@@ -60,7 +60,7 @@ class GreaterThanTest < DatabilityValidatorTest
         disallow_invalid(
           invalid_values,
           I18n.t(
-            :greater_than,
+            :other_than,
             scope: [:errors, :messages],
             count: 'Another date'
           )

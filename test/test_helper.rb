@@ -3,24 +3,18 @@ require 'minitest/unit'
 require 'minitest/pride'
 
 require 'active_model'
-require 'active_support/all'
+require 'active_support/core_ext/time/zones'
+require 'active_support/core_ext/time/conversions'
+require 'active_support/core_ext/date/conversions'
+require 'active_support/core_ext/numeric/time'
+
 require 'datability_validator'
+
+require 'models/sample_model'
 
 I18n.enforce_available_locales = false
 I18n.default_locale = :en
 I18n.locale = :en
-I18n.load_path << Dir[File.expand_path('../locale/*.yml', __FILE__)]
+I18n.load_path << Dir[File.expand_path('../locales/*.yml', __FILE__)]
 
 Time.zone = 'Eastern Time (US & Canada)'
-
-class SampleModel
-  include ActiveModel::Validations
-
-  attr_accessor :date, :another_date
-
-  def initialize(attributes = {})
-    attributes.each do |key, value|
-      send("#{key}=", value)
-    end
-  end
-end

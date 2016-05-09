@@ -1,6 +1,20 @@
 require 'test_helper'
 
 class DatabilityValidatorTest < Minitest::Test
+  def setup
+    @today = Time.zone.now
+    @today_as_string = @today.to_s
+    @today_as_localized_string = DateLocalizer.localize(@today)
+
+    @yesterday = Time.zone.now - 1.day
+    @yesterday_as_string = @yesterday.to_s
+    @yesterday_as_localized_string = DateLocalizer.localize(@yesterday)
+
+    @tomorrow = Time.zone.now + 1.day
+    @tomorrow_as_string = @tomorrow.to_s
+    @tomorrow_as_localized_string = DateLocalizer.localize(@tomorrow)
+  end
+
   def teardown
     SampleModel.clear_validators!
   end
